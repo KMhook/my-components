@@ -1,0 +1,6 @@
+{
+  "generator-alitv": {
+    "fluxFramework": "redux",
+    "react": true
+  }
+}
