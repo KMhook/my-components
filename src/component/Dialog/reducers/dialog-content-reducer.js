@@ -1,6 +1,6 @@
 var i = 0;
-const DialogContentReducder = (state = [], action) => {
-  let count = "count";
+const dialogContent = (state = [], action) => {
+  let count = 'count';
   switch (action.type) {
     case 'CHANGE_DIALOG_CONTENT': 
       count = count + (i ++);
@@ -12,4 +12,4 @@ const DialogContentReducder = (state = [], action) => {
   }
 }; 
 
-export default DialogContentReducder;
+export default dialogContent;

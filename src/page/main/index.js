@@ -1,13 +1,15 @@
+'use strict';
+
 // 推荐使用ES2015的语法
-import React from "react";
-import ReactDOM from "react-dom";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import Dialog from "../../component/Dialog/index";
-import MainReducer from "./reducers";
+import Dialog from '../../component/Dialog/index';
+import { mainApp } from './reducers';
 
-let store = createStore(MainReducer);
+let store = createStore(mainApp);
 
 const Page = {
   init() {
@@ -24,8 +26,8 @@ const Page = {
       document.getElementById('my-dialog'));
   },
   bind() {
-
   }
 };
+
 
 window.Page = Page;

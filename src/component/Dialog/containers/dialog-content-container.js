@@ -1,21 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import DialogActions from '../actions/dialog-actions';
+import { changeDialogContent } from '../actions';
 import DialogContent from '../views/dialog-content';
 
 const mapStateToProps = (state) => {
   return {
-    text: state.DialogReducer.DialogContentReducder.content
-  }
+    text: state.dialog.dialogContent.content
+  };
 }; 
 
 const mapDispatcherToProps = (dispatch) => {
   return {
     onDialogContentClick: () => {
-      dispatch(DialogActions.changeDialogContent());
+      dispatch(changeDialogContent());
     }
-  }
-}
+  };
+};
 
 const DialogContentContainer = connect(
   mapStateToProps,

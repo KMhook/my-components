@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux';
-import DialogReducer from '../../component/Dialog/reducers/dialog-reducer';
+import dialog from '../../component/Dialog/reducers/';
 
-const MainReducer = combineReducers({
-  DialogReducer
+export const mainApp = combineReducers({
+  dialog
 });
 
-export default MainReducer;
 

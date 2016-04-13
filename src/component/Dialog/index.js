@@ -6,7 +6,7 @@ import DialogMain from './views/dialog-main';
 class Dialog extends React.Component {
   constructor() {
     super();
-    this.TAG = "Dialog: ";
+    this.TAG = 'Dialog: ';
   }
 
   render() {
