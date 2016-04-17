@@ -1,5 +1,9 @@
 var i = 0;
-const dialogContent = (state = [], action) => {
+const initState = {
+  content: 123
+};
+
+const dialogContent = (state = initState, action) => {
   let count = 'count';
   switch (action.type) {
     case 'CHANGE_DIALOG_CONTENT': 

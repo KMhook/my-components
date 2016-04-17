@@ -159,3 +159,10 @@ mark {
 body {
   font: 12px/1.5 tahoma, arial, 'Heiti SC', 'Microsoft Yahei', sans-serif;
 }
+#my-dialog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+}
