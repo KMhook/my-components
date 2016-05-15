@@ -1,7 +1,5 @@
-import React from 'react';
-
 import RabbitNode from '../RabbitNode';
-import RabbitRootContainer from './containers';
+import * as RabbitRootActions from  './actions';
 
 require('./index.less');
 class RabbitRoot extends RabbitNode {
@@ -11,17 +9,15 @@ class RabbitRoot extends RabbitNode {
 
   render() {
     return (
-      <RabbitRootContainer />
+      <RabbitRootView />
     );
   }
+
 }
-
-RabbitRoot.displayName = 'RabbitRoot';
-
+RabbitRoot.displayName = 'RabbitRootView';
 RabbitRoot.propTypes = {
 
 };
-
 RabbitRoot.defaultProps = {
 
 };

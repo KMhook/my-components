@@ -8,16 +8,16 @@ import { Provider } from 'react-redux';
 
 //import Dialog from '../../component/Dialog/index';
 //import Button from '../../component/Button/index';
-//import { mainApp } from './reducers';
-import RabbitView from '../../component/view/RabbitView/index';
+import { mainApp } from './reducers';
+import RabbitNode from '../../component/view/RabbitNode';
 
-//let store = createStore(mainApp);
+let store = createStore(mainApp);
 
 const Page = {
   init() {
     // 页面初始化逻辑
     // 通过index.html中的：window.Page.init();进行调用
-    console.log('init!');
+    //console.log('init!');
     this.render();
   },
   render() {
@@ -28,12 +28,18 @@ const Page = {
       document.getElementById('my-dialog'));
       */
     var i = 0;
-    let viewArray = [];
+    let nodeArray = [];
     for(i = 0; i < 5; i ++) {
-      viewArray.push(<RabbitView />);
+      nodeArray.push(<RabbitNode key={i}/>);
     }
     ReactDOM.render(
-      { viewArray },
+      <Provider store={store}>
+        <div>
+          <RabbitNode role='root'>
+            { nodeArray }
+          </RabbitNode>
+        </div>
+      </Provider>,
       document.getElementById('my-dialog')
     );
   },

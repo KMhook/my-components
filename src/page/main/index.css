@@ -166,3 +166,20 @@ body {
   width: 1920px;
   height: 1080px;
 }
+.rabbit-root {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1080px;
+  height: 720px;
+  background: gray;
+}
+.rabbit-node {
+  display: block;
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 100px;
+  height: 100px;
+  background: blue;
+}
