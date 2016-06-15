@@ -10,7 +10,7 @@ module.exports = function(options) {
     .pipe(webserver({
       path: '/de/' + options.name + '/' + options.version + '/',
       host: '0.0.0.0',
-      port: 8089,
+      port: 8088,
       livereload: true,
       directoryListing: {
         enable: true,

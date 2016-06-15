@@ -15,7 +15,9 @@ const mapDispatcherToProps = () => {
 
 class RabbitNodeContainer extends React.Component {
   componentDidMount() {
-
+    /*eslint-disable no-console*/
+    console.log('hello' + this.props.role);
+    /*eslint-enable no-console*/
   }
 
   render() {

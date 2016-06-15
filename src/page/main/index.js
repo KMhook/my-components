@@ -21,12 +21,6 @@ const Page = {
     this.render();
   },
   render() {
-    /*
-    ReactDOM.render(
-      <Provider store={store}>
-      </Provider>,
-      document.getElementById('my-dialog'));
-      */
     var i = 0;
     let nodeArray = [];
     for(i = 0; i < 5; i ++) {
@@ -40,7 +34,7 @@ const Page = {
           </RabbitNode>
         </div>
       </Provider>,
-      document.getElementById('my-dialog')
+      document.getElementById('main-app')
     );
   },
   bind() {

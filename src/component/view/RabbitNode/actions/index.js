@@ -3,3 +3,4 @@ export const initViewRect = () => {
       type: 'CHANGE_DIALOG_CONTENT'
     };
 };
+
