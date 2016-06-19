@@ -43,13 +43,26 @@
     }
 
     //var $focus = $('.gallery-root').eq(0);
+    $('.gallery-root').eq(0).addClass('__focused');
 
    
     document.addEventListener('keydown', function(e) {
       if(e.keyCode == '38') {
-        focusGalleryIndex = (focusGalleryIndex > 0)? focusGalleryIndex - 1 : 0;
+        if(focusGalleryIndex > 0) {
+          $('.gallery-root').eq(focusGalleryIndex).removeClass('__focused');
+          focusGalleryIndex = focusGalleryIndex - 1;
+          $('.gallery-root').eq(focusGalleryIndex).addClass('__focused');
+        } else {
+          focusGalleryIndex = 0;
+        }
       } else if (e.keyCode == '40') {
-        focusGalleryIndex = (focusGalleryIndex < gallerys.length - 1)? focusGalleryIndex + 1: gallerys.length - 1;
+        if(focusGalleryIndex < gallerys.length - 1) {
+          $('.gallery-root').eq(focusGalleryIndex).removeClass('__focused');
+          focusGalleryIndex = focusGalleryIndex + 1;
+         $('.gallery-root').eq(focusGalleryIndex).addClass('__focused');
+        } else {
+          focusGalleryIndex = gallerys.length - 1;
+        }
       } else if (e.keyCode == '37' || e.keyCode == '39') {
         gallerys[focusGalleryIndex].mGalleryView.keyEventHandler(e);
       }

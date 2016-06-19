@@ -25,7 +25,7 @@ body {
   color: white;
 }
 
-.__focused {
+.gallery-root.__focused>.__focused {
   background: blue;
 }
 
