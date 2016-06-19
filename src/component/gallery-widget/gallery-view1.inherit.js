@@ -29,7 +29,9 @@
   GalleryView = function(repository, $parent, config) {
     BaseView.call(this);
     this.$parent = $parent;
-    this.$root = $('<div class="gallery-root"></div>');
+    this.id = "gallery-" + config.id;
+    this.idSelector = '#' + this.id;
+    this.$root = $('<div class="gallery-root" id=' + this.id +  '></div>');
 
 
     this.rootWidth = 0;
@@ -133,7 +135,7 @@
     _initItemsStyle: function() {
       var i = 0;
       var left = 0;
-      var list = $('.__used');//this.$root.children();
+      var list = $(this.idSelector + '>.__used');//this.$root.children();
       for(; i < list.length; i ++) {
         this.contentsLeft[i] = left;
         this.contentsWidth[i] = $(list[i]).width() + parseInt($(list[i]).css('margin-left'));
@@ -164,32 +166,18 @@
 
     },
     _reuseNode: function(content) {
-      var $list = $('.__unused');
+      var $list = $(this.idSelector+'>.__unused');
       var $node = $list.eq(0);
+      console.log('--reuseNode--: ' + $node.length);
       $node.removeClass('__unused').addClass('__used').get(0).innerHTML = content;
       //$list.eq(0).removeClass('__u');
       return $node || null;//this.recycleNodes.shift().removeClass('__unused').addClass('__used').get(0).innerHTML = content || null;
     },
-    
-
     _resetParentWidth: function() {
       //根据当前所有的元素计算宽度
       var i = 0;
     },
-
-    _removePageFromTail: function() {
-      this._reRender();
-    },
-    _removePageFromFront: function() {
-      this._reRender();
-    },
-    _appendPageToTail: function() {
-      this._reRender();
-    },
-    _appendPageToFront: function() {
-      this._reRender();
-    },
-    /*
+     /*
      * 计算当前focus居中，$root的偏移量offset
      * @return {Number} offset
      */
@@ -214,7 +202,7 @@
     _recalculateItemStyle: function() {
       var i = 0;
       var left = 0;
-      var list = $('.__used');//this.$root.children();
+      var list = $(this.idSelector+ '>.__used');//this.$root.children();
       var lastIndex = list.length - 1;
 
       
@@ -276,7 +264,7 @@
       });
 
       var i = 0;
-      var list = $('.__used');
+      var list = $(this.idSelector + '>.__used');
       for(; i < list.length; i ++) {
         left = this.contentsLeft[i];//$(list[i]).data('left');
         $(list[i]).css({
@@ -285,7 +273,7 @@
         });
       }
 
-      list = $('.__unused');
+      list = $(this.idSelector + '>.__unused');
       for(i = 0; i < list.length; i ++) {
         $(list[i]).css('visibility', 'hidden');
       }
@@ -361,11 +349,14 @@
 
       return patch;
     },
+    _isPatchEmpty: function(patch) {
+      return (patch.recover.length == 0 &&  patch.reuse.length == 0) ? true: false;
+    },
 
     _applyPatchToContents: function(patch) {
       var patchElement = null;
       var i = 0;
-      var $NodeInUse = $('.__used');
+      var $NodeInUse = $(this.idSelector+'>.__used');
       var start = 0, end = $NodeInUse.length - 1;
       console.log($NodeInUse);
       console.log('--nodeinuse--');
@@ -374,8 +365,13 @@
         for(i = 0; i < patchElement.items.length; i ++) {
           if(patchElement.op == PATCH_OP.POP) {
             this._recoverNode($NodeInUse.eq(end--));
+            this.contentsLeft.pop();
+            this.contentsWidth.pop();
+
           } else if (patchElement.op == PATCH_OP.SHIFT) {
             this._recoverNode($NodeInUse.eq(start++));
+            this.contentsLeft.shift();
+            this.contentsWidth.shift();
           }
         }
       }
@@ -386,11 +382,16 @@
           for(i = 0; i < patchElement.items.length; i ++) {
             var $container = this._reuseNode(this.onGetView(patchElement.items[i]));
             this.$root.append($container);
+            this.contentsLeft.push(0);
+            this.contentsWidth.push(0);
           }
         } else if (patchElement.op == PATCH_OP.UNSHIFT) {
           for(i = patchElement.items.length - 1; i >= 0; i --) {
+            console.log('--applyPatchToContents-- ' + i);
             var $container = this._reuseNode(this.onGetView(patchElement.items[i]));
             this.$root.prepend($container);
+            this.contentsLeft.unshift(0);
+            this.contentsWidth.unshift(0);
           }
         }
         
@@ -405,74 +406,20 @@
       var i = 0, j = 0;
       var dirtyFlag = false;
       var itemIndex = 0;
-      var $itemsInUse = $('.__used');
+      var $itemsInUse = $(this.idSelector+'>.__used');
 
 
       var patch = this._diffContents(contents);
+      //说明内容未变
+      if(this._isPatchEmpty(patch)) {
+        return false;
+      }
       this._applyPatchToContents(patch);
-      console.log(patch);
-
-
-      //回收
-      for(; i < this.contents.length; i ++) {
-        for(j = 0; j < contents.length; j ++) {
-          if(this.contents[i].pageIndex == contents[j].pageIndex) {
-            dirtyFlag = true;
-          }
-        }
-        //回收container
-        if(!dirtyFlag) {
-          var removeLength = this.contents[i].items.length;
-          //如果回收第一页，说明可能在执行next
-          //如果回收最后一页，说明可能在执行prev
-          if(i === 0) {
-            this.action = 'next';
-          } else if(i == this.contents.length - 1) {
-            this.action = 'prev';
-          }
-          this.contentsWidth.splice(itemIndex, removeLength);
-          this.contentsLeft.splice(itemIndex, removeLength);
-          for(j = 0; j < removeLength; j ++) {
-            this._recoverNode($itemsInUse.eq(itemIndex + j));
-          }
-        }
-        itemIndex += this.contents[i].items.length;
-        dirtyFlag = false;
-      }
-      if(this.contentsWidth.length == 0) {
-        this.action = 'reset';
-      }
-      //复用
-      //prev时向前插入页
-      if(this.action == 'prev') {
-        //说明已经到第一页，不用分配新的页面
-        if(contents[0].pageIndex != this.contents[0].pageIndex) {
-          for(i = contents[0].items.length - 1; i >= 0; i --) {
-            var $container = this._reuseNode(this.onGetView(contents[0].items[i]));
-            this.$root.prepend($container);
-            //在更新数据的同时，更新缓存的left和width
-            this.contentsLeft.unshift(0);
-            this.contentsWidth.unshift(0);
-          }
-        }
-      } else if(this.action == 'next') {
-        var last = contents.length - 1;
-        var currentLast = this.contents.length - 1;
-        //如果最后的pageIndex相同，说明已经到最后的页，不用再从recycleNodes中分配新的node了
-        if(contents[last].pageIndex != this.contents[currentLast].pageIndex) {
-          for(i = 0; i < contents[last].items.length; i ++) {
-            var $container = this._reuseNode(this.onGetView(contents[last].items[i]));
-            this.$root.append($container);
-            this.contentsLeft.push(0);
-            this.contentsWidth.push(0);
-          }
-        }
-      } else if(this.action == 'reset') {
-        this._init();
-        return;
-      }
-      this._recalculateStyle();
       this.contents = contents;
+      console.log("_updateContents: ");
+      console.log(this.contentsWidth);
+      console.log(this.contentsLeft);
+      return true;
     },
     _focusCenter: function() {
       var offset = this._getFocusCenterOffset();
@@ -493,7 +440,7 @@
      * @param {Number} index
      */
     setFocusIndex: function(index) {
-      var list = $('.__used');
+      var list = $(this.idSelector+'>.__used');
       var i = 0, j = 0;
 
       //确定全局index在当前显示列表中的位置
@@ -507,6 +454,7 @@
       }
       this.$focus = $(list[this.localFocusIndex]);
       $(list[this.localFocusIndex]).addClass('__focused');
+      console.log("--setFocusIndex-- gIndex: " + index + ", lIndex: " + this.localFocusIndex);
       this._focusCenter();
     }
   });
