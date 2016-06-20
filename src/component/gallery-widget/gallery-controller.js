@@ -5,7 +5,7 @@
     this.view = view;
     this.view.on('prev', this.prevFocusIndex.bind(this));
     this.view.on('next', this.nextFocusIndex.bind(this));
-    this.view.on('select', this.setSelectIndex.bind(this));
+    this.view.on('selectSilent', this.setSelectIndex.bind(this));
     /*
     document.addEventListener('keydown', function() {
       this.view.prevFocus();

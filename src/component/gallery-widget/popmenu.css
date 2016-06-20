@@ -19,7 +19,7 @@ body {
 
 .gallery-item{
   position: absolute;
-  width: 80px;
+  width: 150px;
   height: auto;
   margin-left: 20px;
   color: white;
