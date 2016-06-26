@@ -32,7 +32,6 @@
     } else {
       throw new Error(this.TAG + '--constructor-- invalid initial selected index');
     }
-    
 
     this._paginate();
   };
@@ -95,13 +94,10 @@
         });
       }
 
-      var renderData = {
-        currentFocusItemIndex: this.currentFocusItemIndex,
-        queriedPages: queriedPages
-      };
+      this.queriedPages = queriedPages;
       //this.renderData.queriedPages = queriedPages;
-      this._set('queriedPages', queriedPages);
-      this._set('renderData', renderData);
+      //this._set('queriedPages', queriedPages);
+      //this._set('renderData', renderData);
     },
 
     /*
@@ -114,14 +110,21 @@
       var pageStartItemIndex = currentFocusPageIndex * this.pageSize;
       var pageEndItemIndex = pageStartItemIndex + this.pageList[currentFocusPageIndex].length - 1;
 
+        console.log('--_updateFocusPageIndex-- currentFocusItemIndex' + currentFocusItemIndex);
       if(currentFocusItemIndex >= pageStartItemIndex && currentFocusItemIndex <= pageEndItemIndex) {
         return;
       } else {
+        currentFocusPageIndex = Math.floor(currentFocusItemIndex / this.pageSize);
+
+        this._set('currentFocusPageIndex', currentFocusPageIndex);
+        /*
         if(currentFocusItemIndex < pageStartItemIndex) {
           this._set('currentFocusPageIndex', currentFocusPageIndex - 1);
         } else {
           this._set('currentFocusPageIndex', currentFocusPageIndex + 1);
         }
+        */
+        console.log('--_updateFocusPageIndex--' + currentFocusPageIndex);
         this._queryPages();
       }
     },
@@ -154,6 +157,12 @@
         currentFocusItemIndex = 0;
       }
       this.updateFocusItemIndex(currentFocusItemIndex);
+      var renderData = {
+        currentSelectItemIndex: this.currentSelectItemIndex,
+        currentFocusItemIndex: this.currentFocusItemIndex,
+        queriedPages: this.queriedPages
+      };
+      this._set('renderData', renderData);
     },
 
     /*
@@ -166,14 +175,38 @@
       } else {
         currentFocusItemIndex = this.itemListLength - 1;
       }
-
       this.updateFocusItemIndex(currentFocusItemIndex);
+      var renderData = {
+        currentSelectItemIndex: this.currentSelectItemIndex,
+        currentFocusItemIndex: this.currentFocusItemIndex,
+        queriedPages: this.queriedPages
+      };
+      this._set('renderData', renderData);
     },
     setFocusItemIndex: function(index) {
       this._resetFocusItemIndex(index);
+      var renderData = {
+        currentSelectItemIndex: this.currentSelectItemIndex,
+        currentFocusItemIndex: this.currentFocusItemIndex,
+        queriedPages: this.queriedPages
+      };
+      this._set('renderData', renderData);
+
     },
     setSelectItemIndex: function(index) {
-      this.updateFocusItemIndex(index);
+      this.currentSelectItemIndex = index;
+      this._resetFocusItemIndex(index);
+      var renderData = {
+        currentSelectItemIndex: this.currentSelectItemIndex,
+        currentFocusItemIndex: this.currentFocusItemIndex,
+        queriedPages: this.queriedPages
+      };
+      console.log('--setSelectItemIndex--');
+      console.log(renderData);
+      this._set('renderData', renderData);
+    },
+    setSelectItemIndexSilent: function(index) {
+      this.currentSelectItemIndex = index;
     }
 
   });

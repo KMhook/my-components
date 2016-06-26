@@ -101,7 +101,7 @@
       }.bind(this));
       */
 
-      //this.setCloseTimer();
+      this.setCloseTimer();
     },
     setCloseTimer: function() {
       clearTimeout(this.closeTimer);
@@ -113,7 +113,6 @@
       console.log(this.TAG + '--show--');
       $('#gallery-parent').css('visibility', 'visible');
       this.showing = true;
-      this.setCloseTimer();
     },
     hide: function() {
       console.log(this.TAG + '--hide--');
